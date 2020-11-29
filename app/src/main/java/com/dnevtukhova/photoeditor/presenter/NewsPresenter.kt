@@ -1,10 +1,8 @@
 package com.dnevtukhova.photoeditor.presenter
 
 import android.util.Log
-import android.widget.Toast
-import com.dnevtukhova.photoeditor.api.NewsItem
+import com.dnevtukhova.photoeditor.api.NetworkConstants.BASE_URL_LENTA
 import com.dnevtukhova.photoeditor.interactor.NewsListInteractor
-import com.dnevtukhova.photoeditor.view.NewsListFragment
 import com.dnevtukhova.photoeditor.view.NewsListView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -24,14 +22,13 @@ class NewsPresenter @Inject constructor(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        Log.d(TAG, "мы в методе onFirstViewAttach")
-        getNews()
+        getNews(BASE_URL_LENTA)
     }
 
-    fun getNews() {
+    fun getNews(url: String) {
         viewState.showProgress()
         Log.d(TAG, "в методе getNews")
-        disposable = newsInteractor.getNews()
+        disposable = newsInteractor.getNews(url)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -44,23 +41,29 @@ class NewsPresenter @Inject constructor(
 
                     for(i in it.channel!!.newsList!!) {
                         i.description = getLink(i.description)
+                        if(i.encloseUrl!= null) {
+                            i.description = i.encloseUrl!!.url
+                        }
+                        Log.d(TAG, "enclose URL ${i.encloseUrl}")
                     }
                     viewState.getNews(it.channel?.newsList)
                     viewState.hideProgress()
                 },
                 onComplete = { Log.d(TAG, "в колбэке onComplete") }
             )
-
     }
 
     //получить ссылку на картинку из поля Описание
-    fun getLink (htmlStringDescription: String): String {
+    private fun getLink (htmlStringDescription: String): String {
         var htmlString = htmlStringDescription
         if(htmlString.contains("src=\"")) {
             htmlString = htmlString.substring(htmlString.indexOf("src=\""))
-            htmlString = htmlString.substring(("src=\"").length);
+            htmlString = htmlString.substring(("src=\"").length)
             htmlString = htmlString.substring(0, htmlString.indexOf("\""))}
-        //   println("ссылка на картинку - $htmlString")
         return htmlString
+    }
+
+    fun clearDisposable () {
+        disposable.dispose()
     }
 }

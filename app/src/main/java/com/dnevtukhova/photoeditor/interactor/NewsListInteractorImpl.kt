@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class NewsListInteractorImpl @Inject constructor(private val api: ServerApi) : NewsListInteractor {
 
-    override fun getNews(): Observable<News> {
-        return api.getNewsFromHabr()
+    override fun getNews(url: String): Observable<News> {
+        return api.getNews(url)
     }
 }

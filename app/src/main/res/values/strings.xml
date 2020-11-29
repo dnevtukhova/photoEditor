@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PhotoEditor</string>
+    <string name="no_filter">Без фильтра</string>
+    <string name="white_black_filter">Ч/Б</string>
+    <string name="sepia">Сепия</string>
+    <string name="name_first_source">Хабр</string>
+    <string name="name_second_source">Лента RU</string>
+    <string name="error_text">Oops, что-то пошло не так</string>
 </resources>

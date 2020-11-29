@@ -1,6 +1,5 @@
 package com.dnevtukhova.photoeditor.view
 
-import androidx.fragment.app.Fragment
 import com.dnevtukhova.photoeditor.api.NewsItem
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
@@ -18,4 +17,7 @@ interface NewsListView: MvpView {
 
     @AddToEndSingle
     fun hideProgress()
+
+    @AddToEndSingle
+    fun setFilter(filter: Int)
 }

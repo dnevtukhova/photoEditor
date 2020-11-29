@@ -5,5 +5,5 @@ import io.reactivex.Observable
 
 
 interface NewsListInteractor {
-    fun getNews(): Observable<News>
+    fun getNews(url:String): Observable<News>
 }
